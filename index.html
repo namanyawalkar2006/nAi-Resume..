@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResumeAI — ATS-Optimized Resumes in Seconds</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text y='.9em' font-size='70' x='12'>📄</text></svg>" />
+  <meta name="description"
+    content="Generate professional, ATS-optimized resumes powered by Gemini AI. Get interview questions, skills gap analysis, LinkedIn summaries and more — all free." />
+  <meta name="keywords"
+    content="resume builder, ATS resume, AI resume generator, Naman interview prep, cover letter, LinkedIn" />
+  <meta name="author" content="ResumeAI" />
+  <meta property="og:title" content="ResumeAI — Build ATS-Perfect Resumes with AI" />
+  <meta property="og:description" content="AI-crafted, keyword-optimized resumes that score 90+ on every ATS system." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <!-- API Configuration for Deployment -->
+  <script>
+    // If you deploy the backend on Railway, paste your Railway URL here (e.g. 'https://your-app.railway.app')
+    // Leave it empty to use the same domain (recommended for Vercel-only deployment)
+    window.API_URL = ''; 
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ========== CURSOR GLOW ========== -->
+  <div class="cursor-glow" id="cursor-glow"></div>
+
+  <!-- ========== PARTICLE CANVAS ========== -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-logo" id="nav-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <span class="logo-text">Resume<span class="logo-accent">AI</span></span>
+        <span class="logo-version">v2.0</span>
+      </div>
+      <div class="nav-links" id="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#testimonials" class="nav-link">Reviews</a>
+        <button class="btn-nav-cta magnetic-btn" id="nav-start-btn">
+          <span>Build My Resume</span>
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+            <path fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle Day/Night Mode">
+        <div class="theme-toggle-track">
+          <div class="theme-toggle-thumb">
+            <!-- Sun icon (light) -->
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <!-- Moon icon (dark) -->
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </button>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div class="mobile-menu hidden" id="mobile-menu">
+      <a href="#features" class="mobile-link">Features</a>
+      <a href="#how-it-works" class="mobile-link">How It Works</a>
+      <a href="#testimonials" class="mobile-link">Reviews</a>
+      <button class="btn-primary btn-mobile-cta" id="mobile-start-btn">Build My Resume →</button>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="aurora aurora-1"></div>
+      <div class="aurora aurora-2"></div>
+      <div class="aurora aurora-3"></div>
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="grid-overlay"></div>
+      <div class="noise-overlay"></div>
+    </div>
+    <div class="hero-content reveal-up">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-text">Powered by nAI </span>
+        <span class="badge-new">v3.0</span>
+      </div>
+      <h1 class="hero-title">
+        Build an <span class="gradient-text animated-gradient">ATS-Perfect</span><br />
+        <span class="typewriter-wrap">
+          <span class="typewriter-text" id="typewriter-text">Resume in Seconds</span>
+          <span class="typewriter-cursor">|</span>
+        </span>
+      </h1>
+      <p class="hero-subtitle">
+        AI-crafted, keyword-optimized resumes that score <strong>90+</strong> on every ATS system.<br />
+        Plus interview prep, skills gap analysis &amp; LinkedIn summary — <em>all free</em>.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary btn-xl btn-glow magnetic-btn" id="hero-start-btn">
+          <span class="btn-text">Generate the My Resume</span>
+          <svg viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+          <div class="btn-shine"></div>
+        </button>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-num counter" data-target="90">0</span><span class="stat-plus">+</span>
+            <span class="stat-label">ATS Score</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num counter" data-target="30">0</span><span class="stat-unit">s</span>
+            <span class="stat-label">Generation</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num">5-in-1</span>
+            <span class="stat-label">AI Tools</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num counter" data-target="10000">0</span><span class="stat-plus">+</span>
+            <span class="stat-label">Resumes Made</span>
+          </div>
+        </div>
+      </div>
+      <!-- ATS Target Logos -->
+      <div class="trust-bar">
+        <span class="trust-label">Optimized for every major ATS used by</span>
+        <div class="trust-logos">
+          <span class="trust-logo">Workday</span>
+          <span class="trust-logo">Taleo</span>
+          <span class="trust-logo">Lever</span>
+          <span class="trust-logo">iCIMS</span>
+          <span class="trust-logo">BambooHR</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual reveal-up" style="animation-delay: 0.2s;">
+      <div class="resume-card-preview tilt-card" id="hero-tilt-card">
+        <!-- Professional Skeleton Shimmer (Back to First Design) -->
+        <div class="preview-header">
+          <div class="preview-avatar shimmer"></div>
+          <div class="preview-info">
+            <div class="preview-name-bar shimmer"></div>
+            <div class="preview-role-bar shimmer"></div>
+          </div>
+          <div class="ats-badge-preview">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#22c55e" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>ATS: 96</span>
+          </div>
+        </div>
+        <div class="preview-section">
+          <div class="preview-section-title shimmer"></div>
+          <div class="preview-line w-full shimmer"></div>
+          <div class="preview-line w-5/6 shimmer" style="animation-delay:0.1s"></div>
+        </div>
+        <div class="preview-section">
+          <div class="preview-section-title shimmer"></div>
+          <div class="preview-exp-item">
+            <div class="preview-line w-3/5 shimmer" style="animation-delay:0.3s"></div>
+            <div class="preview-bullet"></div>
+            <div class="preview-line w-full shimmer" style="animation-delay:0.4s"></div>
+            <div class="preview-line w-4/5 shimmer" style="animation-delay:0.5s"></div>
+          </div>
+        </div>
+        <div class="preview-skills">
+          <div class="preview-skill-tag pulse-tag shimmer"></div>
+          <div class="preview-skill-tag pulse-tag shimmer"></div>
+          <div class="preview-skill-tag pulse-tag shimmer"></div>
+        </div>
+        <div class="preview-glow"></div>
+        <!-- Floating badges around card -->
+        <div class="floating-badge fb-1">🎯 ATS Optimized</div>
+        <div class="floating-badge fb-2">⚡ AI-Enhanced</div>
+        <div class="floating-badge fb-3">📄 PDF Ready</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES ========== -->
+  <section class="features" id="features">
+    <div class="section-container">
+      <div class="section-header reveal-up">
+        <p class="section-label">Why ResumeAI</p>
+        <h2 class="section-title">Everything you need to <span class="gradient-text">land the job</span></h2>
+        <p class="section-subtitle">Powered by cutting-edge nAI to give you an unfair advantage in your job search.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal-up" style="--icon-color: #6366f1; --delay: 0;">
+          <div class="feature-card-glow"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3>AI-Powered Generation</h3>
+          <p>nAI crafts tailored resumes with strong action verbs and quantified achievements.</p>
+          <div class="feature-tag">Core Engine</div>
+        </div>
+        <div class="feature-card reveal-up" style="--icon-color: #22c55e; --delay: 1;">
+          <div class="feature-card-glow"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3>90+ ATS Score Guarantee</h3>
+          <p>Every resume is scored and optimized to pass Applicant Tracking Systems with flying colors.</p>
+          <div class="feature-tag">Most Popular</div>
+        </div>
+        <div class="feature-card reveal-up" style="--icon-color: #f59e0b; --delay: 2;">
+          <div class="feature-card-glow"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3>Interview Prep Coach</h3>
+          <p>Get 10 real, role-specific interview questions with tips and sample answers tailored to your profile.</p>
+          <div class="feature-tag">AI Coach</div>
+        </div>
+        <div class="feature-card reveal-up" style="--icon-color: #ec4899; --delay: 3;">
+          <div class="feature-card-glow"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3>Skills Gap Analysis</h3>
+          <p>See exactly which skills you're missing for your target role — with a personalised action plan to get them.
+          </p>
+          <div class="feature-tag">Analytics</div>
+        </div>
+        <div class="feature-card reveal-up" style="--icon-color: #06b6d4; --delay: 4;">
+          <div class="feature-card-glow"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3>Cover Letter Generator</h3>
+          <p>Auto-generate a compelling, personalized cover letter matched to your resume and target company.</p>
+          <div class="feature-tag">One-Click</div>
+        </div>
+        <div class="feature-card reveal-up" style="--icon-color: #0077B5; --delay: 5;">
+          <div class="feature-card-glow"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2" />
+            </svg>
+          </div>
+          <h3>LinkedIn Summary AI</h3>
+          <p>Get a keyword-rich LinkedIn About section that boosts your search visibility and attracts recruiters.</p>
+          <div class="feature-tag">Bonus</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOW IT WORKS ========== -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-container">
+      <div class="section-header reveal-up">
+        <p class="section-label">Simple Process</p>
+        <h2 class="section-title">From blank page to hired in <span class="gradient-text">3 steps</span></h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card reveal-up" style="--delay: 0;">
+          <div class="step-number-wrap">
+            <div class="step-number">01</div>
+            <div class="step-icon-bg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M8.5 3a4 4 0 100 8 4 4 0 000-8z" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+          </div>
+          <h3>Fill Your Details</h3>
+          <p>Enter your experience, education, skills, and paste the job description you're targeting.</p>
+        </div>
+        <div class="step-connector reveal-up">
+          <div class="connector-line"></div>
+          <div class="connector-dot"></div>
+        </div>
+        <div class="step-card reveal-up" style="--delay: 1;">
+          <div class="step-number-wrap">
+            <div class="step-number">02</div>
+            <div class="step-icon-bg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+          </div>
+          <h3>AI Generates</h3>
+          <p>nAI crafts a tailored, ATS-optimized resume then simultaneously runs 4 deep analyses.</p>
+        </div>
+        <div class="step-connector reveal-up">
+          <div class="connector-line"></div>
+          <div class="connector-dot"></div>
+        </div>
+        <div class="step-card reveal-up" style="--delay: 2;">
+          <div class="step-number-wrap">
+            <div class="step-number">03</div>
+            <div class="step-icon-bg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+          </div>
+          <h3>Download &amp; Apply</h3>
+          <p>Preview your resume, prep for interviews, close skill gaps, and export a PDF — ready to submit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIALS ========== -->
+  <section class="testimonials" id="testimonials">
+    <div class="section-container">
+      <div class="section-header reveal-up">
+        <p class="section-label">What People Say</p>
+        <h2 class="section-title">Loved by <span class="gradient-text">job seekers</span> worldwide</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal-up" style="--delay: 0;">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"I landed my dream role at Google within 2 weeks of using ResumeAI. The ATS
+            optimization is next-level."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="--avatar-color: #6366f1;">A</div>
+            <div>
+              <div class="testimonial-name">Alex Chen</div>
+              <div class="testimonial-role">Software Engineer at Google</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal-up" style="--delay: 1;">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The interview prep feature predicted 4 out of 5 questions I got asked. Absolutely
+            incredible AI."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="--avatar-color: #22c55e;">S</div>
+            <div>
+              <div class="testimonial-name">Sarah Kim</div>
+              <div class="testimonial-role">Product Manager at Meta</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal-up" style="--delay: 2;">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"From 30% ATS match to 95%+ in minutes. This is the best free tool on the internet
+            for job seekers."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="--avatar-color: #f59e0b;">M</div>
+            <div>
+              <div class="testimonial-name">Mike Rodriguez</div>
+              <div class="testimonial-role">Data Scientist at Amazon</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BUILDER APP ========== -->
+  <section class="builder-section" id="builder">
+    <div class="builder-container">
+
+      <!-- Progress Bar -->
+      <div class="progress-header reveal-up">
+        <h2 class="builder-title">Build Your <span class="gradient-text">Resume</span></h2>
+        <p class="builder-subtitle">Fill in your details and let AI do the magic ✨</p>
+        <div class="progress-steps" id="progress-steps">
+          <div class="progress-step active" data-step="0">
+            <div class="step-dot"><span>1</span></div>
+            <span class="step-label">Strategy</span>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="1">
+            <div class="step-dot"><span>2</span></div>
+            <span class="step-label">Personal</span>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="2">
+            <div class="step-dot"><span>3</span></div>
+            <span class="step-label">Experience</span>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="3">
+            <div class="step-dot"><span>4</span></div>
+            <span class="step-label">Education</span>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="4">
+            <div class="step-dot"><span>5</span></div>
+            <span class="step-label">Skills</span>
+          </div>
+          <div class="progress-line"></div>
+          <div class="progress-step" data-step="5">
+            <div class="step-dot"><span>6</span></div>
+            <span class="step-label">Job Target</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step Panels -->
+      <div class="steps-wrapper" id="steps-wrapper">
+
+        <!-- STEP 0: Generation Mode (New First Step) -->
+        <div class="step-panel active" id="step-0">
+          <div class="step-content glass-card">
+            <div class="step-icon-large">🚀</div>
+            <h3 class="step-heading">Choose Your Strategy</h3>
+            <p class="step-description">How would you like to build your resume today?</p>
+
+            <div class="mode-selection-grid">
+              <label class="mode-card-radio">
+                <input type="radio" name="gen-mode" value="enhance" id="mode-enhance" checked>
+                <div class="mode-card-content">
+                  <div class="mode-card-icon">✨</div>
+                  <div class="mode-card-info">
+                    <span class="mode-card-title">AI Enhanced</span>
+                    <span class="mode-card-desc">AI rewrites your experience to guarantee a <b>90+ ATS score</b>. Best
+                      for landing interviews.</span>
+                    <span class="mode-card-badge">Recommended</span>
+                  </div>
+                </div>
+              </label>
+              <label class="mode-card-radio">
+                <input type="radio" name="gen-mode" value="strict" id="mode-strict">
+                <div class="mode-card-content">
+                  <div class="mode-card-icon">📝</div>
+                  <div class="mode-card-info">
+                    <span class="mode-card-title">Build by Own</span>
+                    <span class="mode-card-desc">You provide the content, we handle the <b>perfect professional
+                        formatting</b>. No AI rewriting.</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <!-- Humanizer / Tone Selection -->
+            <div class="tone-selection-area" id="tone-selection-area">
+              <p class="tone-label">Content Voice & Humanization</p>
+              <div class="tone-grid">
+                <label class="tone-option">
+                  <input type="radio" name="resume-tone" value="ats" checked>
+                  <div class="tone-box">
+                    <span class="tone-icon">🤖</span>
+                    <span class="tone-name">ATS-Heavy</span>
+                  </div>
+                </label>
+                <label class="tone-option">
+                  <input type="radio" name="resume-tone" value="balanced">
+                  <div class="tone-box">
+                    <span class="tone-icon">⚖️</span>
+                    <span class="tone-name">Balanced</span>
+                  </div>
+                </label>
+                <label class="tone-option">
+                  <input type="radio" name="resume-tone" value="human">
+                  <div class="tone-box">
+                    <span class="tone-icon">🧑</span>
+                    <span class="tone-name">Humanizer</span>
+                  </div>
+                </label>
+              </div>
+              <p class="tone-hint">"Humanizer" mode uses natural vocabulary to avoid detection and impress human
+                readers.</p>
+            </div>
+
+            <!-- Job Description Focus for AI Path -->
+            <div class="jd-initial-focus" id="jd-initial-focus">
+              <div class="jd-focus-header">
+                <span class="jd-focus-icon">🎯</span>
+                <div>
+                  <h4 class="jd-focus-title">Target Job Description</h4>
+                  <p class="jd-focus-subtitle">Paste the JD here now so AI can start analyzing your strategy.</p>
+                </div>
+              </div>
+              <textarea id="job-description-initial" class="form-textarea" rows="5"
+                placeholder="Paste the job description you are targeting..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 1: Personal Info -->
+        <div class="step-panel" id="step-1">
+          <div class="step-content glass-card">
+            <div class="step-icon-large">👤</div>
+            <h3 class="step-heading">Personal Information</h3>
+            <div class="step-header-actions">
+              <p class="step-description">Tell us about yourself — this forms the header of your resume.</p>
+              <button class="btn-quick-fill" onclick="quickFillPersonal()">✨ Quick Fill Example</button>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="full-name" class="form-label">Full Name <span class="required">*</span></label>
+                <input type="text" id="full-name" class="form-input" placeholder="Alex Johnson" />
+              </div>
+              <div class="form-group">
+                <label for="email" class="form-label">Email <span class="required">*</span></label>
+                <input type="email" id="email" class="form-input" placeholder="alex@example.com" />
+              </div>
+              <div class="form-group">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="tel" id="phone" class="form-input" placeholder="+1 (555) 000-0000" />
+              </div>
+              <div class="form-group">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" id="location" class="form-input" placeholder="San Francisco, CA" />
+              </div>
+              <div class="form-group">
+                <label for="linkedin" class="form-label">LinkedIn URL</label>
+                <input type="url" id="linkedin" class="form-input" placeholder="linkedin.com/in/alexjohnson" />
+              </div>
+              <div class="form-group">
+                <label for="portfolio" class="form-label">Portfolio / Website</label>
+                <input type="url" id="portfolio" class="form-input" placeholder="alexjohnson.dev" />
+              </div>
+              <div class="form-group full-width">
+                <label for="years-exp" class="form-label">Years of Experience</label>
+                <input type="number" id="years-exp" class="form-input" placeholder="5" min="0" max="50" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: Experience -->
+        <div class="step-panel" id="step-2">
+          <div class="step-content glass-card">
+            <div class="step-icon-large">💼</div>
+            <h3 class="step-heading">Work Experience</h3>
+            <div class="step-header-actions">
+              <p class="step-description">Add your work history. AI will enhance your bullets with impact verbs.</p>
+              <button class="btn-quick-fill" onclick="quickFillExperience()">✨ Add Example Position</button>
+            </div>
+            <div id="experience-entries">
+              <!-- Dynamically added -->
+            </div>
+            <button class="btn-add" id="add-experience-btn">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 4v16m8-8H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Add Another Position
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Education -->
+        <div class="step-panel" id="step-3">
+          <div class="step-content glass-card">
+            <div class="step-icon-large">🎓</div>
+            <h3 class="step-heading">Education</h3>
+            <div class="step-header-actions">
+              <p class="step-description">Add your educational background.</p>
+              <button class="btn-quick-fill" onclick="quickFillEducation()">✨ Add Example Education</button>
+            </div>
+            <div id="education-entries">
+              <!-- Dynamically added -->
+            </div>
+            <button class="btn-add" id="add-education-btn">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 4v16m8-8H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Add Another Degree
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Skills -->
+        <div class="step-panel" id="step-4">
+          <div class="step-content glass-card">
+            <div class="step-icon-large">⚡</div>
+            <h3 class="step-heading">Skills &amp; Expertise</h3>
+            <p class="step-description">List your skills — the AI will categorize and prioritize them for ATS
+              optimization.</p>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="technical-skills" class="form-label">Technical Skills</label>
+                <textarea id="technical-skills" class="form-textarea" rows="3"
+                  placeholder="Python, JavaScript, React, Node.js, SQL, AWS, Docker..."></textarea>
+                <p class="form-hint">Comma-separated list</p>
+              </div>
+              <div class="form-group full-width">
+                <label for="soft-skills" class="form-label">Soft Skills</label>
+                <textarea id="soft-skills" class="form-textarea" rows="2"
+                  placeholder="Leadership, Communication, Problem Solving, Team Collaboration..."></textarea>
+              </div>
+              <div class="form-group full-width">
+                <label for="tools-skills" class="form-label">Tools &amp; Platforms</label>
+                <textarea id="tools-skills" class="form-textarea" rows="2"
+                  placeholder="VS Code, Jira, GitHub, Figma, Slack, Notion..."></textarea>
+              </div>
+              <div class="form-group full-width">
+                <label for="certifications" class="form-label">Certifications</label>
+                <textarea id="certifications" class="form-textarea" rows="2"
+                  placeholder="AWS Certified Developer, Google Analytics, PMP..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: Job Target -->
+        <div class="step-panel" id="step-5">
+          <div class="step-content glass-card">
+            <div class="step-icon-large">🎯</div>
+            <h3 class="step-heading">Target Job</h3>
+            <p class="step-description">Paste the job description to supercharge keyword matching, interview prep, and
+              skills gap analysis.</p>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="target-role" class="form-label">Target Job Title <span class="required">*</span></label>
+                <input type="text" id="target-role" class="form-input" placeholder="Senior Software Engineer" />
+              </div>
+              <div class="form-group full-width">
+                <label for="company-name" class="form-label">Company Name (for Cover Letter)</label>
+                <input type="text" id="company-name" class="form-input" placeholder="Google, Meta, Startup Inc..." />
+              </div>
+              <div class="form-group full-width">
+                <label for="job-description" class="form-label">Job Description</label>
+                <textarea id="job-description" class="form-textarea" rows="8"
+                  placeholder="Paste the full job description here...&#10;&#10;The AI will extract keywords, required skills, and tone to perfectly match your resume — and generate tailored interview questions &amp; skills gap analysis."></textarea>
+                <p class="form-hint">The more detail you provide, the better every output will be</p>
+              </div>
+
+              <!-- Mode toggle moved to Step 0 -->
+            </div>
+          </div>
+          <div class="generate-cta">
+            <button class="btn-primary btn-xl btn-generate btn-glow magnetic-btn" id="generate-btn">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <span>Generate My Resume + Full Analysis</span>
+              <div class="btn-shine"></div>
+            </button>
+            <p class="generate-note">Generates resume + interview prep + ATS analysis + skills gap + LinkedIn ✨</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="step-nav" id="step-nav">
+      <button class="btn-secondary magnetic-btn" id="prev-btn" disabled>
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <path fill-rule="evenodd"
+            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+            clip-rule="evenodd" />
+        </svg>
+        Back
+      </button>
+      <div class="step-counter" id="step-counter">Step 1 of 6</div>
+      <button class="btn-primary magnetic-btn" id="next-btn">
+        Next
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <path fill-rule="evenodd"
+            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+            clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+
+    </div>
+  </section>
+
+  <!-- ========== LOADING OVERLAY ========== -->
+  <div class="loading-overlay hidden" id="loading-overlay">
+    <div class="loading-card glass-card">
+      <div class="ai-loader">
+        <div class="ai-ring"></div>
+        <div class="ai-ring"></div>
+        <div class="ai-ring"></div>
+        <div class="ai-core">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+      <h3 class="loading-title" id="loading-title">Generating Your Resume</h3>
+      <p class="loading-subtitle" id="loading-subtitle">Analyzing your profile and crafting ATS-optimized content...</p>
+      <div class="loading-progress-bar">
+        <div class="loading-progress-fill" id="loading-progress-fill"></div>
+      </div>
+      <div class="loading-steps-list" id="loading-steps-list">
+        <div class="loading-step" id="ls-1"><span class="ls-dot pending"></span>Parsing your experience</div>
+        <div class="loading-step" id="ls-2"><span class="ls-dot pending"></span>Matching job keywords</div>
+        <div class="loading-step" id="ls-3"><span class="ls-dot pending"></span>Crafting bullet points</div>
+        <div class="loading-step" id="ls-4"><span class="ls-dot pending"></span>Calculating ATS score</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== RESULT SECTION ========== -->
+  <section class="result-section hidden" id="result-section">
+    <div class="result-container">
+
+      <!-- Result Header -->
+      <div class="result-header reveal-up">
+        <div class="result-title-area">
+          <div class="success-badge">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#22c55e" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Resume Generated!
+          </div>
+          <h2 class="result-heading">Your Complete Career Package</h2>
+        </div>
+        <div class="result-actions">
+          <div class="template-selector">
+            <button class="btn-secondary magnetic-btn" id="template-btn">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+              </svg>
+              Templates
+            </button>
+          </div>
+          <button class="btn-secondary magnetic-btn" id="cover-letter-btn">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Cover Letter
+          </button>
+          <button class="btn-primary btn-glow magnetic-btn" id="download-pdf-btn">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Download PDF
+            <div class="btn-shine"></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── RESULT TABS ── -->
+      <div class="result-tabs" role="tablist" id="result-tabs">
+        <button class="result-tab-btn active" data-tab="resume" role="tab" id="tab-btn-resume">📄 Resume</button>
+        <button class="result-tab-btn" data-tab="ats" role="tab" id="tab-btn-ats">🎯 ATS Analysis</button>
+        <button class="result-tab-btn" data-tab="interview" role="tab" id="tab-btn-interview">🎤 Interview Prep</button>
+        <button class="result-tab-btn" data-tab="skills-gap" role="tab" id="tab-btn-skills-gap">📊 Skills Gap</button>
+        <button class="result-tab-btn" data-tab="linkedin" role="tab" id="tab-btn-linkedin">💼 LinkedIn</button>
+      </div>
+
+      <!-- ── TAB PANELS ── -->
+      <div class="tab-panels">
+
+        <!-- TAB: Resume -->
+        <div class="tab-panel active" id="tab-resume" role="tabpanel">
+          <!-- ATS Score + Keywords -->
+          <div class="result-metrics">
+            <div class="ats-score-card glass-card">
+              <div class="ats-score-ring" id="ats-score-ring">
+                <svg viewBox="0 0 120 120" class="score-svg">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10" />
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="url(#scoreGrad)" stroke-width="10"
+                    stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" transform="rotate(-90 60 60)"
+                    id="score-circle" class="score-circle" />
+                  <defs>
+                    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#6366f1" />
+                      <stop offset="100%" stop-color="#22c55e" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="score-value">
+                  <span id="ats-score-num">--</span>
+                  <span class="score-label">ATS</span>
+                </div>
+              </div>
+              <div class="ats-info">
+                <h3>ATS Score</h3>
+                <p id="ats-score-desc">Resume optimized for applicant tracking systems</p>
+              </div>
+            </div>
+            <div class="keywords-card glass-card">
+              <h3>Keywords Matched</h3>
+              <div class="keywords-list" id="keywords-list"></div>
+            </div>
+            <div class="improvements-card glass-card">
+              <h3>Improvements Made</h3>
+              <ul class="improvements-list" id="improvements-list"></ul>
+            </div>
+          </div>
+
+          <!-- Resume Preview -->
+          <div class="resume-preview-wrapper scroll-reveal">
+            <div class="resume-edit-badge">
+              <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              Click content below to edit directly
+            </div>
+            <div class="resume-document" id="resume-document" contenteditable="true">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: ATS Detailed -->
+        <div class="tab-panel" id="tab-ats" role="tabpanel">
+          <div class="tab-loading">
+            <div class="mini-loader"></div>
+            <p>Running deep ATS analysis...</p>
+          </div>
+        </div>
+
+        <!-- TAB: Interview Prep -->
+        <div class="tab-panel" id="tab-interview" role="tabpanel">
+          <div class="tab-loading">
+            <div class="mini-loader"></div>
+            <p>Generating interview questions...</p>
+          </div>
+        </div>
+
+        <!-- TAB: Skills Gap -->
+        <div class="tab-panel" id="tab-skills-gap" role="tabpanel">
+          <div class="tab-loading">
+            <div class="mini-loader"></div>
+            <p>Analyzing skills gap...</p>
+          </div>
+        </div>
+
+        <!-- TAB: LinkedIn -->
+        <div class="tab-panel" id="tab-linkedin" role="tabpanel">
+          <div class="tab-loading">
+            <div class="mini-loader"></div>
+            <p>Crafting LinkedIn summary...</p>
+          </div>
+        </div>
+
+      </div>
+      <!-- end tab-panels -->
+
+    </div>
+  </section>
+
+  <!-- ========== COVER LETTER MODAL ========== -->
+  <div class="modal-overlay hidden" id="cover-letter-modal">
+    <div class="modal-card glass-card">
+      <div class="modal-header">
+        <h3>✉️ Cover Letter</h3>
+        <button class="modal-close" id="close-cover-letter" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="cover-letter-content" id="cover-letter-content">
+          <div class="modal-loading" id="cover-letter-loading">
+            <div class="mini-loader"></div>
+            <p>Generating cover letter...</p>
+          </div>
+          <div class="cover-letter-text hidden" id="cover-letter-text"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary magnetic-btn" id="copy-cover-letter">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Copy Text
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== BACK TO TOP ========== -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M5 10l7-7m0 0l7 7m-7-7v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <!-- ========== TOAST ========== -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">Resume<span class="logo-accent">AI</span></div>
+          <p class="footer-tagline">Build ATS-perfect resumes with AI.</p>
+        </div>
+        <div class="footer-links-grid">
+          <div class="footer-col">
+            <h4>Product</h4>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#builder">Builder</a>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <a href="#testimonials">Reviews</a>
+            <a href="#">Resume Tips</a>
+            <a href="#">Interview Guide</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-text">Powered by Advanced AI · Your data stays local · Free forever</p>
+        <p class="footer-copyright">© 2026 ResumeAI. All rights reserved.</p>
+        <p class="footer-credit">✦ Created by Naman ✦</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ========== TEMPLATE MODAL ========== -->
+  <div class="modal hidden" id="template-modal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3>Choose a Template</h3>
+        <button class="close-modal" id="close-template-modal">&times;</button>
+      </div>
+      <div class="template-grid">
+        <div class="template-option active" data-template="modern">
+          <div class="template-preview modern"></div>
+          <span class="template-name">Modern Professional</span>
+        </div>
+        <div class="template-option" data-template="minimal">
+          <div class="template-preview minimal"></div>
+          <span class="template-name">Minimalist Sleek</span>
+        </div>
+        <div class="template-option" data-template="classic">
+          <div class="template-preview classic"></div>
+          <span class="template-name">Classic Executive</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TOAST CONTAINER ========== -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- App scripts -->
+  <script type="module" src="js/app.js"></script>
+</body>
+
+</html>

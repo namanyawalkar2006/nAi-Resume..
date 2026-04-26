@@ -1,0 +1,8 @@
+{
+  "name": "ai-resume-generator",
+  "functions": {
+    "api/gemini.js": {
+      "maxDuration": 30
+    }
+  }
+}
