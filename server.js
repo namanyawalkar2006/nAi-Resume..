@@ -169,8 +169,12 @@ app.post('/api/generate-pdf', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`\n🚀 ResumeAI is running happily!`);
-    console.log(`🔗 Local Link: http://localhost:${PORT}`);
-    console.log(`\nPress Ctrl+C to stop.\n`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`\n🚀 ResumeAI is running happily!`);
+        console.log(`🔗 Local Link: http://localhost:${PORT}`);
+        console.log(`\nPress Ctrl+C to stop.\n`);
+    });
+}
+
+module.exports = app;
