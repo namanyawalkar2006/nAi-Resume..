@@ -7,8 +7,7 @@
   "description": "AI-Powered Resume Builder",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js",
-    "build": "echo 'Static Site Generation Done'"
+    "dev": "node server.js"
   },
   "dependencies": {
     "@sparticuz/chromium-min": "123.0.1",
